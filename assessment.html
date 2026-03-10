@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Assessment</title>
-<link rel="stylesheet" href="style.css">
+    <title>Assessment</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -13,6 +13,7 @@
     <a href="assessment.html">Assessment</a>
     <a href="feedback.html">Feedback</a>
     <a href="login.html">Login</a>
+    <button id="theme-toggle" class="theme-btn" title="Toggle Light/Dark Mode">☀️</button>
 </div>
 
 <div class="container">
@@ -23,20 +24,21 @@
         <div class="row-container">
             <div class="text-side">
                 <form id="quiz-form">
-                    <div style="background: #252525; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    
+                    <div class="quiz-question">
                         <p><strong>1. How many players are there in a Cricket team?</strong></p>
                         <input type="radio" name="q1" value="9"> 9 Players<br>
                         <input type="radio" name="q1" value="11"> 11 Players<br>
                         <input type="radio" name="q1" value="12"> 12 Players
                     </div>
 
-                    <div style="background: #252525; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <div class="quiz-question">
                         <p><strong>2. Which game uses a goalpost?</strong></p>
                         <input type="radio" name="q2" value="Cricket"> Cricket<br>
                         <input type="radio" name="q2" value="Football"> Football
                     </div>
 
-                    <div style="background: #252525; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <div class="quiz-question">
                         <p><strong>3. Name one position in Football.</strong></p>
                         <input type="text" name="q3" placeholder="Type answer here...">
                     </div>

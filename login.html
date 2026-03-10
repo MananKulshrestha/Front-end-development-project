@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-<link rel="stylesheet" href="style.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -13,6 +13,7 @@
     <a href="assessment.html">Assessment</a>
     <a href="feedback.html">Feedback</a>
     <a href="login.html">Login</a>
+    <button id="theme-toggle" class="theme-btn" title="Toggle Light/Dark Mode">☀️</button>
 </div>
 
 <div class="container">
@@ -22,12 +23,15 @@
             <div class="text-side">
                 <h1 style="margin-top: 0;">Login</h1>
                 
-                <form action="index.html">
+                <form action="index.html" id="login-form">
                     <label>Username:</label>
                     <input type="text" required placeholder="Enter username">
 
                     <label>Password:</label>
-                    <input type="password" required placeholder="Enter password">
+                    <div class="password-container">
+                        <input type="password" required placeholder="Enter password">
+                        <span class="toggle-password">👁️</span>
+                    </div>
 
                     <input type="submit" value="Login" style="width: 100%;">
                 </form>
