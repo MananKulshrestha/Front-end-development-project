@@ -1,8 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // --- Cookie Helper Functions ---
+    // Sets a cookie with an expiration date (in days)
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Retrieves a cookie value by its name
+    function getCookie(name) {
+        const cookieName = name + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+        for(let i = 0; i < cookieArray.length; i++) {
+            let c = cookieArray[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(cookieName) === 0) {
+                return c.substring(cookieName.length, c.length);
+            }
+        }
+        return "";
+    }
+
+
     // light & dark mode toggle logic
     const themeBtn = document.getElementById("theme-toggle");
-    const currentTheme = localStorage.getItem("theme");
+    
+    // fetch theme preference from cookies instead of local storage
+    const currentTheme = getCookie("theme");
 
     // set theme on load based on memory
     if (currentTheme === "light") {
@@ -14,19 +43,22 @@ document.addEventListener("DOMContentLoaded", () => {
         themeBtn.addEventListener("click", () => {
             document.body.classList.toggle("light-mode");
             
+            // save preference to cookies (expires in 365 days)
             if (document.body.classList.contains("light-mode")) {
-                localStorage.setItem("theme", "light");
+                setCookie("theme", "light", 365);
                 themeBtn.textContent = "🌙";
             } else {
-                localStorage.setItem("theme", "dark");
+                setCookie("theme", "dark", 365);
                 themeBtn.textContent = "☀️";
             }
         });
     }
 
     // personalized nav greeting based on login state
-    const loggedInUser = localStorage.getItem("username");
+    // fetch username from cookies instead of local storage
+    const loggedInUser = getCookie("username");
     const navbar = document.querySelector(".navbar");
+    
     if (loggedInUser && navbar) {
         const loginLink = navbar.querySelector('a[href="login.html"]');
         if (loginLink) {
@@ -37,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
             logoutLink.href = "#";
             logoutLink.textContent = "(Logout)";
             logoutLink.onclick = () => {
-                localStorage.removeItem("username");
+                // To delete a cookie, set its expiration date to the past
+                setCookie("username", "", -1);
                 window.location.reload(); 
             };
             navbar.insertBefore(logoutLink, document.getElementById("theme-toggle"));
@@ -124,10 +157,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll("form");
     forms.forEach(form => {
         form.addEventListener("submit", (e) => {
-            // save username on login to demo the personalized greeting
+            
+            // save username to a cookie on login (expires in 7 days)
             if(form.id === "login-form") {
                 const user = form.querySelector('input[type="text"]').value;
-                localStorage.setItem("username", user);
+                setCookie("username", user, 7);
             }
 
             // stop form submit and shake if passwords don't match
@@ -215,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById("timer");
     
     if (quizForm && timerDisplay) {
-        let timeLeft = 60; 
+        let timeLeft = 10; 
         const timerInterval = setInterval(() => {
             timeLeft--;
             let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
