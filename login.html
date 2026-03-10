@@ -25,13 +25,15 @@
                 
                 <form action="index.html" id="login-form">
                     <label>Username:</label>
-                    <input type="text" required placeholder="Enter username">
+                    <input type="text" id="login-username" required placeholder="Enter username">
 
                     <label>Password:</label>
                     <div class="password-container">
-                        <input type="password" required placeholder="Enter password">
+                        <input type="password" id="login-password" required placeholder="Enter password">
                         <span class="toggle-password">👁️</span>
                     </div>
+
+                    <p id="login-error" style="color: red; font-size: 14px; text-align: center; margin-top: -10px; min-height: 20px;"></p>
 
                     <input type="submit" value="Login" style="width: 100%;">
                 </form>

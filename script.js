@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // --- Cookie Helper Functions ---
-    // Sets a cookie with an expiration date (in days)
     function setCookie(name, value, days) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -9,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.cookie = name + "=" + value + ";" + expires + ";path=/";
     }
 
-    // Retrieves a cookie value by its name
     function getCookie(name) {
         const cookieName = name + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
@@ -29,11 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // light & dark mode toggle logic
     const themeBtn = document.getElementById("theme-toggle");
-    
-    // fetch theme preference from cookies
     const currentTheme = getCookie("theme");
 
-    // set theme on load based on memory
     if (currentTheme === "light") {
         document.body.classList.add("light-mode");
         if(themeBtn) themeBtn.textContent = "🌙";
@@ -42,8 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (themeBtn) {
         themeBtn.addEventListener("click", () => {
             document.body.classList.toggle("light-mode");
-            
-            // save preference to cookies (expires in 365 days)
             if (document.body.classList.contains("light-mode")) {
                 setCookie("theme", "light", 365);
                 themeBtn.textContent = "🌙";
@@ -54,47 +47,36 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
     // --- Navbar Layout Restructuring (Dynamic Right Controls) ---
     const navbar = document.querySelector(".navbar");
     const loginLink = navbar ? navbar.querySelector('a[href="login.html"]') : null;
     
     if (navbar) {
-        // Create a container to hold the right-aligned elements
         const rightControls = document.createElement("div");
         rightControls.className = "nav-right-controls";
-
-        // Put the theme button into the right container first
         if (themeBtn) rightControls.appendChild(themeBtn);
 
-        const loggedInUser = getCookie("username");
+        const loggedInUser = getCookie("loggedInUser");
 
         if (loggedInUser && loginLink) {
-            // Transform the Login link into a Logout link
             loginLink.textContent = "Logout";
             loginLink.href = "#"; 
             loginLink.onclick = (e) => {
                 e.preventDefault();
-                setCookie("username", "", -1); // delete cookie
+                setCookie("loggedInUser", "", -1); 
                 window.location.reload(); 
             };
 
-            // Move the Logout link next to the theme button in the right controls
             rightControls.appendChild(loginLink);
 
-            // Create the Welcome Message with a bigger font class
             const welcomeMsg = document.createElement("span");
             welcomeMsg.textContent = `Welcome, ${loggedInUser}!`;
             welcomeMsg.className = "welcome-msg";
             
-            // Add it to the extreme right of the controls
             rightControls.appendChild(welcomeMsg);
         }
-
-        // Append the entirely assembled controls container to the navbar
         navbar.appendChild(rightControls);
     }
-
 
     // typing effect for the main heading
     const typingElement = document.getElementById("typing-effect");
@@ -172,25 +154,52 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // form submit actions & shake animation for errors
+    // --- FORM SUBMIT ACTIONS: LOGIN & SIGNUP SIMULATION ---
     const forms = document.querySelectorAll("form");
     forms.forEach(form => {
         form.addEventListener("submit", (e) => {
             
-            // save username to a cookie on login (expires in 7 days)
-            if(form.id === "login-form") {
-                e.preventDefault(); // Stop default form submission to prevent race conditions
-                const user = form.querySelector('input[type="text"]').value;
-                setCookie("username", user, 7);
-                window.location.href = "index.html"; // Redirect manually after setting cookie
-            }
-
-            // stop form submit and shake if passwords don't match
+            // 1. Signup Form Verification & Registration
             if (form.id === "signup-form") {
                 const pass = document.getElementById("signup-password");
                 const conf = document.getElementById("signup-confirm");
+                const usernameInput = form.querySelector('input[type="text"]').value;
+                
+                // If passwords don't match, stop submission and shake
                 if (pass && conf && pass.value !== conf.value) {
                     e.preventDefault();
+                    form.classList.add("shake");
+                    setTimeout(() => form.classList.remove("shake"), 500); 
+                } else {
+                    // Valid Registration: Save "account" in cookies
+                    e.preventDefault();
+                    setCookie("registeredUser", usernameInput, 7);
+                    setCookie("registeredPass", pass.value, 7);
+                    
+                    alert("Account created successfully! Please login.");
+                    window.location.href = "login.html";
+                }
+            }
+
+            // 2. Login Form Verification
+            if(form.id === "login-form") {
+                e.preventDefault(); 
+                const enteredUser = document.getElementById("login-username").value;
+                const enteredPass = document.getElementById("login-password").value;
+                const errorText = document.getElementById("login-error");
+                
+                // Retrieve the registered account details from cookies
+                const storedUser = getCookie("registeredUser");
+                const storedPass = getCookie("registeredPass");
+
+                // Verify credentials
+                if (enteredUser === storedUser && enteredPass === storedPass) {
+                    // Successful login: Set the active session cookie
+                    setCookie("loggedInUser", enteredUser, 7);
+                    window.location.href = "index.html"; 
+                } else {
+                    // Failed login: Show error and shake form
+                    errorText.textContent = "Invalid username or password!";
                     form.classList.add("shake");
                     setTimeout(() => form.classList.remove("shake"), 500); 
                 }
@@ -254,20 +263,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const phoneInput = document.getElementById("phone-input");
     if (phoneInput) {
         phoneInput.addEventListener("input", function (e) {
-            // Strip out everything except numbers
             let cleaned = e.target.value.replace(/\D/g, '');
-            
-            // Prevent entering more than 10 digits
             if (cleaned.length > 10) {
                 cleaned = cleaned.substring(0, 10);
             }
-
-            // Format as XXXXX XXXXX
             let formatted = cleaned;
             if (cleaned.length > 5) {
                 formatted = cleaned.substring(0, 5) + ' ' + cleaned.substring(5);
             }
-
             e.target.value = formatted;
         });
     }
@@ -294,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let s = (timeLeft % 60).toString().padStart(2, '0');
             timerDisplay.textContent = `Time Left: ${m}:${s}`;
             
-            // auto submit when time is up
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 quizForm.dispatchEvent(new Event('submit')); 
