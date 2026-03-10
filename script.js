@@ -54,28 +54,47 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // personalized nav greeting based on login state
-    // fetch username from cookies
-    const loggedInUser = getCookie("username");
+
+    // --- Navbar Layout Restructuring (Dynamic Right Controls) ---
     const navbar = document.querySelector(".navbar");
+    const loginLink = navbar ? navbar.querySelector('a[href="login.html"]') : null;
     
-    if (loggedInUser && navbar) {
-        const loginLink = navbar.querySelector('a[href="login.html"]');
-        if (loginLink) {
-            loginLink.textContent = `Welcome, ${loggedInUser}!`;
+    if (navbar) {
+        // Create a container to hold the right-aligned elements
+        const rightControls = document.createElement("div");
+        rightControls.className = "nav-right-controls";
+
+        // Put the theme button into the right container first
+        if (themeBtn) rightControls.appendChild(themeBtn);
+
+        const loggedInUser = getCookie("username");
+
+        if (loggedInUser && loginLink) {
+            // Transform the Login link into a Logout link
+            loginLink.textContent = "Logout";
             loginLink.href = "#"; 
-            
-            const logoutLink = document.createElement("a");
-            logoutLink.href = "#";
-            logoutLink.textContent = "(Logout)";
-            logoutLink.onclick = () => {
-                // To delete a cookie, set its expiration date to the past
-                setCookie("username", "", -1);
+            loginLink.onclick = (e) => {
+                e.preventDefault();
+                setCookie("username", "", -1); // delete cookie
                 window.location.reload(); 
             };
-            navbar.insertBefore(logoutLink, document.getElementById("theme-toggle"));
+
+            // Move the Logout link next to the theme button in the right controls
+            rightControls.appendChild(loginLink);
+
+            // Create the Welcome Message with a bigger font class
+            const welcomeMsg = document.createElement("span");
+            welcomeMsg.textContent = `Welcome, ${loggedInUser}!`;
+            welcomeMsg.className = "welcome-msg";
+            
+            // Add it to the extreme right of the controls
+            rightControls.appendChild(welcomeMsg);
         }
+
+        // Append the entirely assembled controls container to the navbar
+        navbar.appendChild(rightControls);
     }
+
 
     // typing effect for the main heading
     const typingElement = document.getElementById("typing-effect");
