@@ -19,7 +19,14 @@
     <div class="card">
         <h1 style="text-align: center;">Create Account</h1>
 
-        <form action="login.html">
+        <form action="login.html" id="signup-form">
+            
+            <div class="drop-zone">
+                📁 Drag & Drop Profile Picture Here or Click to Upload
+                <input type="file" hidden accept="image/*">
+                <div class="preview-container"></div>
+            </div>
+
             <label>Full Name:</label>
             <input type="text" required>
 
@@ -27,10 +34,18 @@
             <input type="email" required>
 
             <label>Password:</label>
-            <input type="password" required>
+            <div class="password-container">
+                <input type="password" id="signup-password" required>
+                <span class="toggle-password">👁️</span>
+            </div>
+            <div class="strength-meter"><div class="strength-bar" id="strength-bar"></div></div>
 
             <label>Confirm Password:</label>
-            <input type="password" required>
+            <div class="password-container">
+                <input type="password" id="signup-confirm" required>
+                <span class="toggle-password">👁️</span>
+            </div>
+            <p id="match-text" style="font-size: 12px; margin-top: -10px;"></p>
 
             <input type="submit" value="Sign Up" style="width: 100%;">
         </form>
@@ -41,5 +56,6 @@
     </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>

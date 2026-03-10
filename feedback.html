@@ -30,8 +30,21 @@
                     <label>Your Email:</label>
                     <input type="email" placeholder="john@example.com">
 
+                    <label>Phone Number (Optional):</label>
+                    <input type="text" id="phone-input" placeholder="(123) 456-7890">
+
+                    <label>Rate your experience:</label>
+                    <div class="star-rating">
+                        <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+                    </div>
+
                     <label>Your Feedback:</label>
                     <textarea rows="5" placeholder="Write your message here..."></textarea>
+
+                    <div class="drop-zone" style="padding: 10px;">
+                        📎 Attach a screenshot (Optional)
+                        <input type="file" hidden accept="image/*">
+                    </div>
 
                     <br>
                     <input type="submit" value="Send Feedback">
@@ -51,5 +64,6 @@
     </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>

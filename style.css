@@ -163,3 +163,106 @@ img {
         margin: 5px 10px;
     }
 }
+/* --- 1. Page Load Fade-In --- */
+.container {
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 2. Hover Glow Effects --- */
+.card:hover {
+    box-shadow: 0 4px 20px rgba(187, 134, 252, 0.4);
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="submit"]:hover, .navbar a:hover {
+    box-shadow: 0 0 10px rgba(187, 134, 252, 0.6);
+}
+
+/* --- 10. Form Shake on Error --- */
+.shake {
+    animation: shakeAnim 0.4s;
+}
+@keyframes shakeAnim {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+/* Password Toggle & Strength Meter (Features 8 & 11) */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+    top: 15px;
+}
+.strength-meter {
+    height: 5px;
+    background-color: #444;
+    border-radius: 3px;
+    margin-top: -15px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+/* File Upload Drop Zone (Feature 16) */
+.drop-zone {
+    border: 2px dashed #444;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    color: #bdbdbd;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+    background-color: #252525;
+}
+.drop-zone:hover {
+    border-color: #bb86fc;
+}
+
+/* Star Rating (Feature 28) */
+.star-rating {
+    font-size: 30px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+.star-rating span {
+    color: #444;
+    transition: color 0.2s;
+}
+
+/* Confetti (Feature 21) */
+.confetti {
+    position: fixed;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    background-color: #bb86fc;
+    border-radius: 50%;
+    z-index: 9999;
+    animation: fall linear forwards;
+}
+.confetti:nth-child(even) { background-color: #03dac6; border-radius: 0; }
+@keyframes fall {
+    to { transform: translateY(100vh) rotate(360deg); }
+}

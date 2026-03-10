@@ -17,10 +17,9 @@
 
 <div class="container">
     <div class="card">
-        <h1>Games Learning Center</h1>
+        <h1 id="typing-effect">Games Learning Center</h1>
 
         <div class="row-container">
-            
             <div class="text-side">
                 <p>Welcome to our simple website for learning about various games such as Cricket and Football.</p>
 
@@ -36,12 +35,16 @@
             </div>
 
             <div class="image-side">
-                <img src="home-banner.jpg" alt="Sports Collage">
+                <div class="carousel-container" style="position: relative; border: 2px solid #333; border-radius: 6px; overflow: hidden;">
+                    <img class="carousel-slide" src="home-banner.jpg" alt="Sports Collage" style="display: block;">
+                    <img class="carousel-slide" src="home-banner-2.jpg" alt="Sports Collage 2" style="display: none;">
+                    <img class="carousel-slide" src="home-banner-3.jpg" alt="Sports Collage 3" style="display: none;">
+                </div>
             </div>
-
         </div>
     </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>
