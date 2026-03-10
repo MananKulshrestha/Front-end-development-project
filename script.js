@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // light & dark mode toggle logic
     const themeBtn = document.getElementById("theme-toggle");
     
-    // fetch theme preference from cookies instead of local storage
+    // fetch theme preference from cookies
     const currentTheme = getCookie("theme");
 
     // set theme on load based on memory
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // personalized nav greeting based on login state
-    // fetch username from cookies instead of local storage
+    // fetch username from cookies
     const loggedInUser = getCookie("username");
     const navbar = document.querySelector(".navbar");
     
@@ -160,15 +160,21 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // save username to a cookie on login (expires in 7 days)
             if(form.id === "login-form") {
+                e.preventDefault(); // Stop default form submission to prevent race conditions
                 const user = form.querySelector('input[type="text"]').value;
                 setCookie("username", user, 7);
+                window.location.href = "index.html"; // Redirect manually after setting cookie
             }
 
             // stop form submit and shake if passwords don't match
-            if (form.id === "signup-form" && passInput.value !== confirmInput.value) {
-                e.preventDefault();
-                form.classList.add("shake");
-                setTimeout(() => form.classList.remove("shake"), 500); 
+            if (form.id === "signup-form") {
+                const pass = document.getElementById("signup-password");
+                const conf = document.getElementById("signup-confirm");
+                if (pass && conf && pass.value !== conf.value) {
+                    e.preventDefault();
+                    form.classList.add("shake");
+                    setTimeout(() => form.classList.remove("shake"), 500); 
+                }
             }
         });
     });
