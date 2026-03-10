@@ -266,3 +266,63 @@ input[type="submit"]:hover, .navbar a:hover {
 @keyframes fall {
     to { transform: translateY(100vh) rotate(360deg); }
 }
+/* --- Sports Grid (Course Learning Page) --- */
+.sports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.sport-card {
+    background: #252525;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #444;
+}
+
+.sport-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: none;
+}
+
+.sport-card h3 {
+    color: #bb86fc;
+    margin-bottom: 5px;
+}
+
+.sport-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4);
+    border-color: #bb86fc;
+}
+
+/* --- Individual Sport Page Layout --- */
+.sport-images-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.sport-images-row img {
+    flex: 1;
+    width: 50%;
+    object-fit: cover;
+    height: 250px;
+}
+
+@media (max-width: 600px) {
+    .sport-images-row {
+        flex-direction: column;
+    }
+    .sport-images-row img {
+        width: 100%;
+    }
+}
