@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById("timer");
     
     if (quizForm && timerDisplay) {
-        let timeLeft = 10; 
+        let timeLeft = 60; 
         const timerInterval = setInterval(() => {
             timeLeft--;
             let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
@@ -308,18 +308,63 @@ document.addEventListener("DOMContentLoaded", () => {
             clearInterval(timerInterval); 
             let score = 0;
             
+            // Clear any previous error messages
+            document.querySelectorAll('.quiz-error').forEach(e => e.remove());
+
+            // Helper function to show errors under specific questions
+            const showError = (inputName, message) => {
+                const inputElement = document.querySelector(`input[name="${inputName}"]`);
+                if(inputElement) {
+                    const container = inputElement.closest('.quiz-question');
+                    const errorSpan = document.createElement('div');
+                    errorSpan.className = 'quiz-error';
+                    errorSpan.style.color = '#ff5252';
+                    errorSpan.style.fontSize = '14px';
+                    errorSpan.style.marginTop = '10px';
+                    errorSpan.innerHTML = `❌ Incorrect: ${message}`;
+                    container.appendChild(errorSpan);
+                }
+            };
+            
+            // Evaluate Question 1
             const q1 = document.querySelector('input[name="q1"]:checked');
+            if (q1 && q1.value === "11") {
+                score++;
+            } else {
+                showError('q1', 'A standard cricket team has exactly 11 players on the field.');
+            }
+
+            // Evaluate Question 2
             const q2 = document.querySelector('input[name="q2"]:checked');
-            const q3 = document.querySelector('input[name="q3"]').value.toLowerCase();
+            if (q2 && q2.value === "Football") {
+                score++;
+            } else {
+                showError('q2', 'Football uses a goalpost to score points. Cricket uses wickets.');
+            }
 
-            if (q1 && q1.value === "11") score++;
-            if (q2 && q2.value === "Football") score++;
-            if (q3.includes("forward") || q3.includes("defender") || q3.includes("midfielder") || q3.includes("goalkeeper")) score++;
+            // Evaluate Question 3
+            const q3 = document.querySelector('input[name="q3"]');
+            const q3Val = q3 ? q3.value.toLowerCase() : "";
+            if (q3Val.includes("forward") || q3Val.includes("defender") || q3Val.includes("midfielder") || q3Val.includes("goalkeeper")) {
+                score++;
+            } else {
+                showError('q3', 'Valid positions include: Forward, Defender, Midfielder, or Goalkeeper.');
+            }
 
+            // Display Final Results
             const resultDiv = document.getElementById("quiz-result");
             resultDiv.innerHTML = `<h3 style="color:#bb86fc;">You scored ${score} out of 3!</h3>`;
             
-            if (score === 3) triggerConfetti();
+            if (score === 3) {
+                triggerConfetti();
+            } else {
+                resultDiv.innerHTML += `<p style="color: #bdbdbd; font-size: 14px;">Review the feedback above to see what you missed.</p>`;
+            }
+            
+            // Disable the submit button after grading
+            quizForm.querySelector('input[type="submit"]').disabled = true;
+            quizForm.querySelector('input[type="submit"]').style.opacity = '0.5';
+            quizForm.querySelector('input[type="submit"]').style.cursor = 'not-allowed';
         });
     }
 
