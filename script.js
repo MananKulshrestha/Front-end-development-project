@@ -250,12 +250,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // auto-format phone numbers
+    // auto-format Indian phone numbers (10 digits)
     const phoneInput = document.getElementById("phone-input");
     if (phoneInput) {
         phoneInput.addEventListener("input", function (e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+            // Strip out everything except numbers
+            let cleaned = e.target.value.replace(/\D/g, '');
+            
+            // Prevent entering more than 10 digits
+            if (cleaned.length > 10) {
+                cleaned = cleaned.substring(0, 10);
+            }
+
+            // Format as XXXXX XXXXX
+            let formatted = cleaned;
+            if (cleaned.length > 5) {
+                formatted = cleaned.substring(0, 5) + ' ' + cleaned.substring(5);
+            }
+
+            e.target.value = formatted;
         });
     }
 
